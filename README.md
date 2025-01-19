@@ -1,1 +1,2 @@
 # XAUUSD
+My trading journey
