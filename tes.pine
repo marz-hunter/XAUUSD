@@ -5,7 +5,8 @@ strategy('MRZ - UT Bot Flip Strategy',
          default_qty_type=strategy.percent_of_equity, 
          default_qty_value=10,
          commission_type=strategy.commission.percent,
-         commission_value=0.1)
+         commission_value=0.1,
+         calc_on_every_tick=true)
 
 //==============================================================================
 // INPUTS
