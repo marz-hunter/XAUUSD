@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footprint Order Flow Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .hidden { display: none !important; }
+        .grid-cols-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .bg-green-400 { background-color: rgb(74 222 128); }
+        .bg-red-400 { background-color: rgb(248 113 113); }
+        .footprint-level { transition: all 0.2s ease; }
+        .footprint-level:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-3">
+                Footprint Order Flow Analysis
+            </h1>
+            <p class="text-xl text-gray-600">Analisis Volume & Entry/Exit Strategy</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="mb-8">
+            <div class="flex flex-wrap justify-center gap-2 bg-white p-2 rounded-lg shadow">
+                <button onclick="showSection('examples')" id="tab-examples" class="tab-button bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    Entry Examples
+                </button>
+                <button onclick="showSection('strategy')" id="tab-strategy" class="tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors hover:bg-gray-300">
+                    Complete Strategy
+                </button>
+                <button onclick="showSection('guide')" id="tab-guide" class="tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors hover:bg-gray-300">
+                    Step-by-Step Guide
+                </button>
+            </div>
+        </div>
+
+        <!-- Section 1: Entry Examples -->
+        <div id="section-examples" class="section">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Contoh Entry BUY/SELL Footprint</h2>
+                
+                <!-- Example Selector -->
+                <div class="mb-6">
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button onclick="showExample(0)" class="example-btn bg-blue-500 text-white px-4 py-2 rounded-lg font-medium">
+                            CONTOH 1
+                        </button>
+                        <button onclick="showExample(1)" class="example-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium">
+                            CONTOH 2
+                        </button>
+                        <button onclick="showExample(2)" class="example-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium">
+                            CONTOH 3
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Example Content -->
+                <div id="example-content">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Complete Strategy -->
+        <div id="section-strategy" class="section hidden">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Complete Footprint Strategy</h2>
+                
+                <!-- Quick Setup Cards -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Quick Setup Reference</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                            <h4 class="font-bold text-blue-800 mb-2">Scalp Setup A</h4>
+                            <p class="text-sm text-gray-700 mb-3">Volume Spike + POC Rejection</p>
+                            <div class="space-y-1 text-xs">
+                                <p><strong>Entry:</strong> Counter trend dari POC</p>
+                                <p><strong>Stop:</strong> Beyond POC + 5 pips</p>
+                                <p><strong>Target:</strong> Previous swing/10-15 pips</p>
+                                <span class="text-green-600 font-semibold">Success: 75%</span>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                            <h4 class="font-bold text-blue-800 mb-2">Scalp Setup B</h4>
+                            <p class="text-sm text-gray-700 mb-3">Imbalance + Absorption</p>
+                            <div class="space-y-1 text-xs">
+                                <p><strong>Entry:</strong> Break dari absorption zone</p>
+                                <p><strong>Stop:</strong> Dalam absorption zone</p>
+                                <p><strong>Target:</strong> Opposite imbalance level</p>
+                                <span class="text-green-600 font-semibold">Success: 70%</span>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                            <h4 class="font-bold text-blue-800 mb-2">Scalp Setup C</h4>
+                            <p class="text-sm text-gray-700 mb-3">Failed Breakout</p>
+                            <div class="space-y-1 text-xs">
+                                <p><strong>Entry:</strong> Reversal setelah failed BO</p>
+                                <p><strong>Stop:</strong> Beyond breakout level</p>
+                                <p><strong>Target:</strong> Return to range</p>
+                                <span class="text-green-600 font-semibold">Success: 65%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy Accordions -->
+                <div class="space-y-4">
+                    <!-- Strategy 1: Volume Imbalance -->
+                    <div class="border border-gray-200 rounded-lg">
+                        <button onclick="toggleAccordion('volume-imbalance')" class="w-full bg-gray-50 p-4 text-left hover:bg-gray-100 transition-colors rounded-t-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-blue-600">📊</span>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">Strategy 1: Volume Imbalance</h3>
+                                        <p class="text-gray-600">Trading berdasarkan ketidakseimbangan volume ekstrem</p>
+                                    </div>
+                                </div>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                        </button>
+                        <div id="accordion-volume-imbalance" class="accordion-content hidden p-6 bg-white">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                    <h4 class="font-bold text-red-800 mb-3">SELL Setup</h4>
+                                    <div class="space-y-2 text-sm">
+                                        <p><strong>Kondisi:</strong></p>
+                                        <ul class="list-disc ml-4 space-y-1">
+                                            <li>Ask volume (merah) > 3x Bid volume (hijau)</li>
+                                            <li>Minimal 2-3 level berturut-turut</li>
+                                            <li>Volume total > 200 (untuk Gold)</li>
+                                        </ul>
+                                        <p><strong>Entry:</strong> Saat harga break dibawah level imbalance</p>
+                                        <p><strong>Stop:</strong> 5-10 pips diatas level tertinggi imbalance</p>
+                                        <p><strong>Target:</strong> 10-20 pips atau level support berikutnya</p>
+                                    </div>
+                                </div>
+                                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                    <h4 class="font-bold text-green-800 mb-3">BUY Setup</h4>
+                                    <div class="space-y-2 text-sm">
+                                        <p><strong>Kondisi:</strong></p>
+                                        <ul class="list-disc ml-4 space-y-1">
+                                            <li>Bid volume (hijau) > 3x Ask volume (merah)</li>
+                                            <li>Minimal 2-3 level berturut-turut</li>
+                                            <li>Volume total > 200 (untuk Gold)</li>
+                                        </ul>
+                                        <p><strong>Entry:</strong> Saat harga break diatas level imbalance</p>
+                                        <p><strong>Stop:</strong> 5-10 pips dibawah level terendah imbalance</p>
+                                        <p><strong>Target:</strong> 10-20 pips atau level resistance berikutnya</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-yellow-50 p-3 rounded border-l-4 border-yellow-400 mt-4">
+                                <p class="text-sm"><strong>⚠️ Filter:</strong> Jangan trade jika spread terlalu lebar (>2 pips untuk Gold) atau saat news high impact</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strategy 2: POC Strategy -->
+                    <div class="border border-gray-200 rounded-lg">
+                        <button onclick="toggleAccordion('poc-strategy')" class="w-full bg-gray-50 p-4 text-left hover:bg-gray-100 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-purple-600">🎯</span>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">Strategy 2: POC (Point of Control)</h3>
+                                        <p class="text-gray-600">Trading berdasarkan reaksi harga di Point of Control</p>
+                                    </div>
+                                </div>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                        </button>
+                        <div id="accordion-poc-strategy" class="accordion-content hidden p-6 bg-white">
+                            <div class="bg-purple-50 p-4 rounded-lg">
+                                <h4 class="font-bold text-purple-800 mb-3">Setup POC Trading:</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                    <div class="bg-white p-3 rounded border">
+                                        <h5 class="font-semibold text-blue-700 mb-2">POC Rejection</h5>
+                                        <ul class="list-disc ml-4 space-y-1">
+                                            <li>Harga test POC</li>
+                                            <li>Volume absorption tinggi</li>
+                                            <li>Gagal break POC</li>
+                                            <li>Entry: Counter trend</li>
+                                            <li>Risk/Reward: 1:2</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border">
+                                        <h5 class="font-semibold text-green-700 mb-2">POC Breakout</h5>
+                                        <ul class="list-disc ml-4 space-y-1">
+                                            <li>Volume tinggi saat break POC</li>
+                                            <li>Follow through yang kuat</li>
+                                            <li>Tidak ada immediate pullback</li>
+                                            <li>Entry: Trend following</li>
+                                            <li>Risk/Reward: 1:1.5</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border">
+                                        <h5 class="font-semibold text-orange-700 mb-2">POC Magnet</h5>
+                                        <ul class="list-disc ml-4 space-y-1">
+                                            <li>Harga jauh dari POC</li>
+                                            <li>Low volume area</li>
+                                            <li>Trend menuju POC</li>
+                                            <li>Entry: Menuju POC</li>
+                                            <li>Target: POC level</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strategy 3: Volume Absorption -->
+                    <div class="border border-gray-200 rounded-lg">
+                        <button onclick="toggleAccordion('absorption')" class="w-full bg-gray-50 p-4 text-left hover:bg-gray-100 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-orange-600">🛡️</span>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">Strategy 3: Volume Absorption</h3>
+                                        <p class="text-gray-600">Identifikasi institutional absorption untuk reversal</p>
+                                    </div>
+                                </div>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                        </button>
+                        <div id="accordion-absorption" class="accordion-content hidden p-6 bg-white">
+                            <div class="bg-orange-50 p-4 rounded-lg">
+                                <h4 class="font-bold text-orange-800 mb-3">Cara Identifikasi Absorption:</h4>
+                                <div class="space-y-3">
+                                    <div class="bg-white p-3 rounded border-l-4 border-red-400">
+                                        <h5 class="font-semibold text-red-700 mb-2">Selling Absorption (Bullish Signal)</h5>
+                                        <ul class="list-disc ml-4 space-y-1 text-sm">
+                                            <li>Harga push down dengan volume tinggi</li>
+                                            <li>Bid volume mulai dominan di level rendah</li>
+                                            <li>Ask volume menurun meski harga turun</li>
+                                            <li>Harga mulai stagnan meski selling pressure</li>
+                                            <li><strong>Entry:</strong> Saat harga mulai recover dari absorption zone</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border-l-4 border-green-400">
+                                        <h5 class="font-semibold text-green-700 mb-2">Buying Absorption (Bearish Signal)</h5>
+                                        <ul class="list-disc ml-4 space-y-1 text-sm">
+                                            <li>Harga push up dengan volume tinggi</li>
+                                            <li>Ask volume mulai dominan di level tinggi</li>
+                                            <li>Bid volume menurun meski harga naik</li>
+                                            <li>Harga mulai stagnan meski buying pressure</li>
+                                            <li><strong>Entry:</strong> Saat harga mulai decline dari absorption zone</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded mt-4">
+                                <p class="text-sm"><strong>💡 Tips:</strong> Absorption biasanya terjadi di level psikologis (round numbers) atau support/resistance kuat</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strategy 4: Market Timing -->
+                    <div class="border border-gray-200 rounded-lg">
+                        <button onclick="toggleAccordion('timing')" class="w-full bg-gray-50 p-4 text-left hover:bg-gray-100 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-indigo-600">⏰</span>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">Strategy 4: Market Timing</h3>
+                                        <p class="text-gray-600">Waktu optimal untuk scalping footprint</p>
+                                    </div>
+                                </div>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                        </button>
+                        <div id="accordion-timing" class="accordion-content hidden p-6 bg-white">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                    <h4 class="font-bold text-green-800 mb-3">✅ Best Times (WIB)</h4>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="bg-white p-2 rounded">
+                                            <p class="font-semibold">London Open: 14:00-18:00</p>
+                                            <p class="text-gray-600">High volume, clear trends</p>
+                                        </div>
+                                        <div class="bg-white p-2 rounded">
+                                            <p class="font-semibold">NY Open: 20:00-24:00</p>
+                                            <p class="text-gray-600">Peak liquidity, best setups</p>
+                                        </div>
+                                        <div class="bg-white p-2 rounded">
+                                            <p class="font-semibold">London-NY Overlap: 20:00-22:00</p>
+                                            <p class="text-gray-600">Maximum volume, tight spreads</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                    <h4 class="font-bold text-red-800 mb-3">❌ Avoid Times (WIB)</h4>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="bg-white p-2 rounded">
+                                            <p class="font-semibold">Asian Session: 08:00-14:00</p>
+                                            <p class="text-gray-600">Low volume, choppy moves</p>
+                                        </div>
+                                        <div class="bg-white p-2 rounded">
+                                            <p class="font-semibold">Friday NY Close: 04:00-08:00</p>
+                                            <p class="text-gray-600">Thin liquidity, erratic</p>
+                                        </div>
+                                        <div class="bg-white p-2 rounded">
+                                            <p class="font-semibold">Major News: ±30 min</p>
+                                            <p class="text-gray-600">Unpredictable volatility</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strategy 5: Risk Management -->
+                    <div class="border border-gray-200 rounded-lg">
+                        <button onclick="toggleAccordion('risk-management')" class="w-full bg-gray-50 p-4 text-left hover:bg-gray-100 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-red-600">💰</span>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">Strategy 5: Risk Management</h3>
+                                        <p class="text-gray-600">Sistem manajemen risiko untuk scalping</p>
+                                    </div>
+                                </div>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                        </button>
+                        <div id="accordion-risk-management" class="accordion-content hidden p-6 bg-white">
+                            <div class="bg-red-50 p-4 rounded-lg">
+                                <h4 class="font-bold text-red-800 mb-3">Aturan Risk Management:</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <div class="space-y-3">
+                                        <div class="bg-white p-3 rounded border">
+                                            <h5 class="font-semibold text-blue-700 mb-2">Position Sizing</h5>
+                                            <ul class="list-disc ml-4 space-y-1">
+                                                <li>Risk maksimal 1-2% per trade</li>
+                                                <li>Hitung lot berdasarkan stop distance</li>
+                                                <li>Jangan over-leverage</li>
+                                                <li>Max 3 posisi simultan</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-white p-3 rounded border">
+                                            <h5 class="font-semibold text-green-700 mb-2">Take Profit Rules</h5>
+                                            <ul class="list-disc ml-4 space-y-1">
+                                                <li>Target minimal 1:1 Risk/Reward</li>
+                                                <li>Partial TP di 50% target pertama</li>
+                                                <li>Move SL to BE setelah partial TP</li>
+                                                <li>Trail stop untuk sisa posisi</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="bg-white p-3 rounded border">
+                                            <h5 class="font-semibold text-red-700 mb-2">Stop Loss Rules</h5>
+                                            <ul class="list-disc ml-4 space-y-1">
+                                                <li>SELALU pakai stop loss</li>
+                                                <li>Stop based on volume level</li>
+                                                <li>Max stop: 20 pips (Gold)</li>
+                                                <li>No moving stop melawan posisi</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-white p-3 rounded border">
+                                            <h5 class="font-semibold text-purple-700 mb-2">Daily Limits</h5>
+                                            <ul class="list-disc ml-4 space-y-1">
+                                                <li>Max loss per hari: 6% modal</li>
+                                                <li>Max trades per hari: 10</li>
+                                                <li>Stop trading after 3 loss berturut</li>
+                                                <li>Review dan evaluasi harian</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Position Sizing Calculator -->
+                <div class="mt-8 bg-purple-50 p-6 rounded-lg border border-purple-200">
+                    <h3 class="text-xl font-bold text-purple-800 mb-4 flex items-center gap-2">
+                        <span>🛡️</span>
+                        Contoh Position Sizing (Modal $10,000)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white p-4 rounded border">
+                            <h4 class="font-semibold text-gray-800 mb-2">Risk 1% ($100)</h4>
+                            <p>Stop distance: 0.7 pips</p>
+                            <p>Position size: <strong>1.4 lot</strong></p>
+                            <p class="text-green-600">Conservative approach</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h4 class="font-semibold text-gray-800 mb-2">Risk 1.5% ($150)</h4>
+                            <p>Stop distance: 0.7 pips</p>
+                            <p>Position size: <strong>2.1 lot</strong></p>
+                            <p class="text-blue-600">Balanced approach</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h4 class="font-semibold text-gray-800 mb-2">Risk 2% ($200)</h4>
+                            <p>Stop distance: 0.7 pips</p>
+                            <p>Position size: <strong>2.8 lot</strong></p>
+                            <p class="text-orange-600">Aggressive approach</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-purple-600 mt-3">
+                        *Perhitungan untuk Gold (XAUUSD). Selalu sesuaikan dengan toleransi risk Anda.
+                    </p>
+                </div>
+
+                <!-- Trading Checklist -->
+                <div class="mt-8 bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-lg border border-purple-200">
+                    <h3 class="text-2xl font-bold text-purple-800 mb-4">Pre-Trade Checklist</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-purple-700 mb-3">✅ Before Entry:</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex items-center gap-2">
+                                    <input type="checkbox" class="rounded">
+                                    <span>Market session aktif (London/NY)</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <input type="checkbox" class="rounded">
+                                    <span>Tidak ada news high impact dalam 30 menit</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <input type="checkbox" class="rounded">
+                                    <span>Spread normal (<2 pips untuk Gold)</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <input type="checkbox" class="rounded">
+                                    <span>Volume pattern jelas teridentifikasi</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <input type="checkbox" class="rounded">
+                                    <span>Stop loss dan target sudah dihitung</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-purple-700 mb-3">⚠️ Risk Checks:</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex items-center gap-2">
+                                    <input type="checkbox" class="rounded">
+                                    <span>Total risk hari ini < 6% modal</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <input type="checkbox" class="rounded">
+                                    <span>Belum 3x loss berturut-turut hari ini</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <input type="checkbox" class="rounded">
+                                    <span>Mental condition baik (tidak emotional)</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <input type="checkbox" class="rounded">
+                                    <span>Risk/Reward minimal 1:1</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Final Notes -->
+                <div class="mt-8 bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-400">
+                    <h3 class="font-bold text-yellow-800 mb-3">🎯 Key Success Factors:</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2">Discipline</h4>
+                            <p class="text-gray-700">Ikuti rules tanpa exception. Tidak ada "kali ini berbeda".</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2">Practice</h4>
+                            <p class="text-gray-700">Minimal 3 bulan demo trading sebelum live account.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2">Patience</h4>
+                            <p class="text-gray-700">Tunggu setup yang tepat. Quality over quantity.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Step-by-Step Guide -->
+        <div id="section-guide" class="section hidden">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Panduan Scalping Step-by-Step</h2>
+                
+                <!-- Progress Bar -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-sm text-gray-500" id="step-indicator">
+                            Step 1 of 4
+                        </span>
+                        <div class="flex gap-1">
+                            <div class="w-3 h-3 rounded-full bg-blue-500" id="dot-0"></div>
+                            <div class="w-3 h-3 rounded-full bg-gray-300" id="dot-1"></div>
+                            <div class="w-3 h-3 rounded-full bg-gray-300" id="dot-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-gray-300" id="dot-3"></div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-2 mb-4">
+                        <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 25%"></div>
+                    </div>
+                </div>
+
+                <!-- Step Content -->
+                <div id="step-content">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between mt-8">
+                    <button onclick="prevStep()" id="prev-btn" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 text-gray-400 cursor-not-allowed">
+                        ← Sebelumnya
+                    </button>
+                    <button onclick="nextStep()" id="next-btn" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600">
+                        Selanjutnya →
+                    </button>
+                </div>
+
+                <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                    <p class="text-sm text-gray-600 text-center">
+                        💡 <strong>Tips:</strong> Latih dulu di demo account sebelum trading real. 
+                        Scalping membutuhkan pengalaman dan kedisiplinan tinggi!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let currentExample = 0;
+        let currentStep = 0;
+
+        // Example Data
+        const examples = [
+            {
+                title: 'CONTOH 1: BUY SETUP - Volume Imbalance',
+                type: 'BUY',
+                scenario: 'Harga testing support dengan volume absorption',
+                footprintData: [
+                    { price: '3285.5', bid: 45, ask: 180, level: 'resistance' },
+                    { price: '3285.0', bid: 60, ask: 220, level: 'normal' },
+                    { price: '3284.5', bid: 320, ask: 80, level: 'entry', signal: 'BUY' },
+                    { price: '3284.0', bid: 280, ask: 95, level: 'support' },
+                    { price: '3283.5', bid: 150, ask: 70, level: 'normal' }
+                ],
+                analysis: {
+                    entry: '3284.5',
+                    stop: '3283.8',
+                    target1: '3285.2',
+                    target2: '3285.8',
+                    risk: '0.7 pips',
+                    reward1: '0.7 pips (1:1)',
+                    reward2: '1.3 pips (1:1.86)',
+                    confidence: '80%'
+                },
+                reasoning: [
+                    'Bid volume 320 vs Ask volume 80 (ratio 4:1) - Strong buying pressure',
+                    'Volume absorption terlihat di level 3284.5 (institutional buying)',
+                    'Previous level 3284.0 showing continued bid dominance',
+                    'Entry saat harga confirm bounce dari 3284.5 support',
+                    'Risk kecil dengan potential reward yang baik'
+                ]
+            },
+            {
+                title: 'CONTOH 2: SELL SETUP - POC Rejection',
+                type: 'SELL',
+                scenario: 'Harga testing POC dengan selling pressure tinggi',
+                footprintData: [
+                    { price: '3285.5', bid: 70, ask: 150, level: 'normal' },
+                    { price: '3285.0', bid: 90, ask: 350, level: 'entry', signal: 'SELL', poc: true },
+                    { price: '3284.5', bid: 180, ask: 280, level: 'normal' },
+                    { price: '3284.0', bid: 60, ask: 190, level: 'support' },
+                    { price: '3283.5', bid: 40, ask: 160, level: 'target' }
+                ],
+                analysis: {
+                    entry: '3285.0',
+                    stop: '3285.4',
+                    target1: '3284.3',
+                    target2: '3283.8',
+                    risk: '0.4 pips',
+                    reward1: '0.7 pips (1:1.75)',
+                    reward2: '1.2 pips (1:3)',
+                    confidence: '75%'
+                },
+                reasoning: [
+                    'Ask volume 350 vs Bid volume 90 (ratio 3.9:1) - Strong selling pressure',
+                    'POC level (3285.0) menunjukkan rejection dengan volume tinggi',
+                    'Continuation selling terlihat di level dibawah POC',
+                    'Entry saat konfirmasi break dibawah POC dengan volume',
+                    'Excellent risk/reward ratio untuk scalping'
+                ]
+            },
+            {
+                title: 'CONTOH 3: ABSORPTION SETUP - Institutional Flow',
+                type: 'BUY',
+                scenario: 'Selling absorption di area value low',
+                footprintData: [
+                    { price: '3284.5', bid: 120, ask: 180, level: 'normal' },
+                    { price: '3284.0', bid: 200, ask: 240, level: 'normal' },
+                    { price: '3283.5', bid: 450, ask: 200, level: 'absorption' },
+                    { price: '3283.0', bid: 380, ask: 150, level: 'entry', signal: 'BUY' },
+                    { price: '3282.5', bid: 280, ask: 120, level: 'support' }
+                ],
+                analysis: {
+                    entry: '3283.0',
+                    stop: '3282.3',
+                    target1: '3283.8',
+                    target2: '3284.5',
+                    risk: '0.7 pips',
+                    reward1: '0.8 pips (1:1.14)',
+                    reward2: '1.5 pips (1:2.14)',
+                    confidence: '85%'
+                },
+                reasoning: [
+                    'Massive bid volume 450 di 3283.5 vs ask 200 - Clear absorption',
+                    'Institutional buying teridentifikasi dari volume profile',
+                    'Continuation buying di level 3283.0 (380 vs 150)',
+                    'Entry setelah konfirmasi absorpsi selling pressure',
+                    'High probability setup dengan clear institutional flow'
+                ]
+            }
+        ];
+
+        // Step Data
+        const steps = [
+            {
+                title: "1. Memahami Footprint Chart",
+                content: `
+                    <div class="space-y-4">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="font-bold mb-3">Contoh Footprint Chart:</h3>
+                            <div class="grid grid-cols-3 gap-2 max-w-md">
+                                <div class="text-center font-bold text-sm">Harga</div>
+                                <div class="text-center font-bold text-sm">Bid Volume</div>
+                                <div class="text-center font-bold text-sm">Ask Volume</div>
+                                
+                                <div class="text-center py-1">3285.0</div>
+                                <div class="bg-red-200 text-center py-1 rounded text-sm font-bold">150</div>
+                                <div class="bg-green-200 text-center py-1 rounded text-sm font-bold">45</div>
+                                
+                                <div class="text-center py-1">3284.5</div>
+                                <div class="bg-red-200 text-center py-1 rounded text-sm font-bold">200</div>
+                                <div class="bg-green-200 text-center py-1 rounded text-sm font-bold">80</div>
+                                
+                                <div class="text-center py-1 bg-yellow-100 font-bold">3284.0</div>
+                                <div class="bg-green-200 text-center py-1 rounded text-sm font-bold">300</div>
+                                <div class="bg-red-200 text-center py-1 rounded text-sm font-bold">120</div>
+                                
+                                <div class="text-center py-1">3283.5</div>
+                                <div class="bg-green-200 text-center py-1 rounded text-sm font-bold">180</div>
+                                <div class="bg-red-200 text-center py-1 rounded text-sm font-bold">95</div>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2">
+                                <div class="w-4 h-4 bg-red-200 rounded"></div>
+                                <span><strong>Merah:</strong> Volume dominan = Tekanan JUAL</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-4 h-4 bg-green-200 rounded"></div>
+                                <span><strong>Hijau:</strong> Volume dominan = Tekanan BELI</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-4 h-4 bg-yellow-100 rounded border"></div>
+                                <span><strong>POC (Point of Control):</strong> Volume tertinggi</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "2. Strategi Entry - Volume Imbalance",
+                content: `
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-bold mb-3 text-blue-800">Contoh Setup SELL:</h3>
+                            <div class="grid grid-cols-4 gap-2 max-w-lg">
+                                <div class="text-center font-bold text-xs">Harga</div>
+                                <div class="text-center font-bold text-xs">Bid</div>
+                                <div class="text-center font-bold text-xs">Ask</div>
+                                <div class="text-center font-bold text-xs">Signal</div>
+                                
+                                <div class="text-center py-1 text-xs">3285.5</div>
+                                <div class="bg-red-300 text-center py-1 rounded text-xs font-bold">250</div>
+                                <div class="bg-green-200 text-center py-1 rounded text-xs">30</div>
+                                <div class="text-center py-1 text-red-600 font-bold text-xs">SELL!</div>
+                                
+                                <div class="text-center py-1 text-xs">3285.0</div>
+                                <div class="bg-red-300 text-center py-1 rounded text-xs font-bold">300</div>
+                                <div class="bg-green-200 text-center py-1 rounded text-xs">50</div>
+                                <div class="text-center py-1 text-xs">Strong Sell</div>
+                                
+                                <div class="text-center py-1 text-xs">3284.5</div>
+                                <div class="bg-red-200 text-center py-1 rounded text-xs">120</div>
+                                <div class="bg-green-200 text-center py-1 rounded text-xs">100</div>
+                                <div class="text-center py-1 text-xs">Normal</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-red-50 p-3 rounded border-l-4 border-red-400">
+                            <p class="font-semibold text-red-800">Setup SELL Signal:</p>
+                            <p class="text-sm text-red-700">Volume SELL (merah) 5x lebih besar dari volume BUY (hijau)</p>
+                            <p class="text-xs text-red-600 mt-1">
+                                Entry: 3285.0 | Stop: 3285.5 | Target: 3284.0 | Risk:Reward = 1:2
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "3. Strategi Entry - POC Rejection",
+                content: `
+                    <div class="space-y-4">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="font-bold mb-3 text-green-800">Contoh Setup BUY - POC Bounce:</h3>
+                            <div class="grid grid-cols-4 gap-2 max-w-lg">
+                                <div class="text-center font-bold text-xs">Harga</div>
+                                <div class="text-center font-bold text-xs">Bid</div>
+                                <div class="text-center font-bold text-xs">Ask</div>
+                                <div class="text-center font-bold text-xs">Signal</div>
+                                
+                                <div class="text-center py-1 text-xs">3284.5</div>
+                                <div class="bg-green-200 text-center py-1 rounded text-xs">80</div>
+                                <div class="bg-red-200 text-center py-1 rounded text-xs">60</div>
+                                <div class="text-center py-1 text-xs">Normal</div>
+                                
+                                <div class="text-center py-1 text-xs bg-yellow-100 font-bold">3284.0</div>
+                                <div class="bg-green-300 text-center py-1 rounded text-xs font-bold">400</div>
+                                <div class="bg-red-200 text-center py-1 rounded text-xs">150</div>
+                                <div class="text-center py-1 text-green-600 font-bold text-xs">BUY!</div>
+                                
+                                <div class="text-center py-1 text-xs">3283.5</div>
+                                <div class="bg-green-200 text-center py-1 rounded text-xs">70</div>
+                                <div class="bg-red-200 text-center py-1 rounded text-xs">80</div>
+                                <div class="text-center py-1 text-xs">Normal</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 p-3 rounded border-l-4 border-green-400">
+                            <p class="font-semibold text-green-800">Setup BUY Signal:</p>
+                            <p class="text-sm text-green-700">Harga menyentuh POC (3284.0) dengan volume BUY dominan</p>
+                            <p class="text-xs text-green-600 mt-1">
+                                Entry: 3284.0 | Stop: 3283.5 | Target: 3284.5+ | Risk:Reward = 1:1+
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "4. Management Risk Scalping",
+                content: `
+                    <div class="space-y-4">
+                        <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
+                            <h3 class="font-bold text-yellow-800 mb-3">Aturan Penting Scalping:</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div class="space-y-2">
+                                    <p class="font-semibold text-gray-800">✅ DO (Lakukan):</p>
+                                    <ul class="space-y-1 text-gray-700">
+                                        <li>• Risk maksimal 1-2% per trade</li>
+                                        <li>• Selalu pakai Stop Loss</li>
+                                        <li>• Target profit 1:1 atau 1:2</li>
+                                        <li>• Entry saat volume konfirmasi</li>
+                                        <li>• Cut loss cepat jika salah</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="space-y-2">
+                                    <p class="font-semibold text-gray-800">❌ DON'T (Jangan):</p>
+                                    <ul class="space-y-1 text-gray-700">
+                                        <li>• Trading tanpa stop loss</li>
+                                        <li>• Menambah posisi saat loss</li>
+                                        <li>• Trading saat news penting</li>
+                                        <li>• Revenge trading</li>
+                                        <li>• Risk lebih dari 2%</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-bold mb-2 text-blue-800">Contoh Perhitungan Risk:</h3>
+                            <div class="text-sm space-y-1">
+                                <p>Modal: $1000</p>
+                                <p>Risk per trade: 2% = $20</p>
+                                <p>Entry: 3284.0 | Stop: 3283.5 | Distance: 0.5 point</p>
+                                <p>Lot size: $20 ÷ 0.5 = 0.4 lot (untuk Gold)</p>
+                                <p class="font-semibold text-blue-700">Jadi maksimal loss = $20 jika hit stop loss</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        // Utility Functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(`section-${sectionName}`).classList.remove('hidden');
+            
+            // Update tab styles
+            document.querySelectorAll('.tab-button').forEach(tab => {
+                tab.classList.remove('bg-blue-500', 'text-white');
+                tab.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            document.getElementById(`tab-${sectionName}`).classList.remove('bg-gray-200', 'text-gray-700');
+            document.getElementById(`tab-${sectionName}`).classList.add('bg-blue-500', 'text-white');
+        }
+
+        function showExample(index) {
+            currentExample = index;
+            
+            // Update button styles
+            document.querySelectorAll('.example-btn').forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.remove('bg-gray-200', 'text-gray-700');
+                    btn.classList.add('bg-blue-500', 'text-white');
+                } else {
+                    btn.classList.remove('bg-blue-500', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                }
+            });
+            
+            renderExample();
+        }
+
+        function renderExample() {
+            const example = examples[currentExample];
+            const content = document.getElementById('example-content');
+            
+            content.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Footprint Chart -->
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg border-2 ${example.type === 'BUY' ? 'border-green-400 bg-green-50' : 'border-red-400 bg-red-50'}">
+                            <h3 class="text-xl font-bold mb-2">${example.title}</h3>
+                            <p class="text-gray-700 text-sm mb-4">${example.scenario}</p>
+                            
+                            <!-- Footprint Display -->
+                            <div class="bg-white p-4 rounded border">
+                                <div class="grid grid-cols-4 gap-1 mb-2">
+                                    <div class="text-center font-bold text-sm">Price</div>
+                                    <div class="text-center font-bold text-sm text-green-700">Bid Vol</div>
+                                    <div class="text-center font-bold text-sm text-red-700">Ask Vol</div>
+                                    <div class="text-center font-bold text-sm">Signal</div>
+                                </div>
+                                
+                                <div class="space-y-1">
+                                    ${example.footprintData.map(level => `
+                                        <div class="grid grid-cols-4 gap-1 p-1 rounded footprint-level ${level.level === 'entry' ? 'bg-yellow-100 border-2 border-yellow-400' : level.poc ? 'bg-purple-100 border border-purple-300' : 'bg-gray-50'}">
+                                            <div class="text-center text-sm font-medium py-1">
+                                                ${level.price}
+                                                ${level.poc ? '<div class="text-xs text-purple-600">POC</div>' : ''}
+                                            </div>
+                                            <div class="text-center text-sm font-bold py-1 rounded ${getBidColor(level.bid, level.ask)}">${level.bid}</div>
+                                            <div class="text-center text-sm font-bold py-1 rounded ${getAskColor(level.bid, level.ask)}">${level.ask}</div>
+                                            <div class="text-center text-xs py-1 flex items-center justify-center">
+                                                ${level.signal ? `<div class="flex items-center gap-1 px-2 py-1 rounded font-bold ${level.signal === 'BUY' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}">${level.signal}</div>` : ''}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Legend -->
+                            <div class="bg-gray-50 p-3 rounded text-xs mt-4">
+                                <h4 class="font-bold mb-2">Legend:</h4>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 bg-green-300 rounded"></div>
+                                        <span>Bid Dominant</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 bg-red-300 rounded"></div>
+                                        <span>Ask Dominant</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 bg-yellow-200 border border-yellow-400 rounded"></div>
+                                        <span>Entry Level</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 bg-purple-200 border border-purple-300 rounded"></div>
+                                        <span>POC Level</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analysis -->
+                    <div class="space-y-4">
+                        <!-- Trade Setup -->
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <h4 class="font-bold text-blue-800 mb-3">Trade Setup</h4>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="bg-white p-2 rounded">
+                                    <p class="font-semibold text-green-700">Entry Price:</p>
+                                    <p class="text-lg font-bold">${example.analysis.entry}</p>
+                                </div>
+                                <div class="bg-white p-2 rounded">
+                                    <p class="font-semibold text-red-700">Stop Loss:</p>
+                                    <p class="text-lg font-bold">${example.analysis.stop}</p>
+                                </div>
+                                <div class="bg-white p-2 rounded">
+                                    <p class="font-semibold text-blue-700">Target 1:</p>
+                                    <p class="font-bold">${example.analysis.target1}</p>
+                                    <p class="text-xs text-gray-600">${example.analysis.reward1}</p>
+                                </div>
+                                <div class="bg-white p-2 rounded">
+                                    <p class="font-semibold text-purple-700">Target 2:</p>
+                                    <p class="font-bold">${example.analysis.target2}</p>
+                                    <p class="text-xs text-gray-600">${example.analysis.reward2}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3 grid grid-cols-2 gap-3">
+                                <div class="bg-white p-2 rounded text-center">
+                                    <p class="font-semibold text-gray-700">Risk:</p>
+                                    <p class="text-red-600 font-bold">${example.analysis.risk}</p>
+                                </div>
+                                <div class="bg-white p-2 rounded text-center">
+                                    <p class="font-semibold text-gray-700">Confidence:</p>
+                                    <p class="text-green-600 font-bold">${example.analysis.confidence}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reasoning -->
+                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                            <h4 class="font-bold text-yellow-800 mb-3">Analisis Entry</h4>
+                            <ul class="space-y-2 text-sm">
+                                ${example.reasoning.map((reason, index) => `
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-yellow-600 font-bold">${index + 1}.</span>
+                                        <span class="text-gray-700">${reason}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+
+                        <!-- Execution Steps -->
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                            <h4 class="font-bold text-green-800 mb-3 flex items-center gap-2">
+                                <span>▶️</span>
+                                Langkah Eksekusi
+                            </h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                                    <span>Tunggu konfirmasi volume pattern sesuai analisis</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                                    <span>Set stop loss di ${example.analysis.stop} SEBELUM entry</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                                    <span>Entry ${example.type} di ${example.analysis.entry}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</div>
+                                    <span>Take partial profit di target 1, move SL to breakeven</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">5</div>
+                                    <span>Trail stop atau exit di target 2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getBidColor(bid, ask) {
+            const ratio = bid / (bid + ask);
+            if (ratio > 0.7) return 'bg-green-400 text-white';
+            if (ratio > 0.6) return 'bg-green-300';
+            if (ratio > 0.5) return 'bg-green-200';
+            return 'bg-red-200';
+        }
+
+        function getAskColor(bid, ask) {
+            const ratio = ask / (bid + ask);
+            if (ratio > 0.7) return 'bg-red-400 text-white';
+            if (ratio > 0.6) return 'bg-red-300';
+            if (ratio > 0.5) return 'bg-red-200';
+            return 'bg-green-200';
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(`accordion-${id}`);
+            const arrow = content.previousElementSibling.querySelector('.accordion-arrow');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                arrow.textContent = '▲';
+            } else {
+                content.classList.add('hidden');
+                arrow.textContent = '▼';
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateStep();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateStep();
+            }
+        }
+
+        function updateStep() {
+            // Update step indicator
+            document.getElementById('step-indicator').textContent = `Step ${currentStep + 1} of ${steps.length}`;
+            
+            // Update progress bar
+            const progress = ((currentStep + 1) / steps.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            
+            // Update dots
+            for (let i = 0; i < steps.length; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (i === currentStep) {
+                    dot.classList.remove('bg-gray-300');
+                    dot.classList.add('bg-blue-500');
+                } else {
+                    dot.classList.remove('bg-blue-500');
+                    dot.classList.add('bg-gray-300');
+                }
+            }
+            
+            // Update buttons
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            
+            if (currentStep === 0) {
+                prevBtn.classList.add('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                prevBtn.classList.remove('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+            } else {
+                prevBtn.classList.remove('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                prevBtn.classList.add('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+            }
+            
+            if (currentStep === steps.length - 1) {
+                nextBtn.classList.add('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                nextBtn.classList.remove('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+            } else {
+                nextBtn.classList.remove('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                nextBtn.classList.add('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+            }
+            
+            // Update content
+            const stepContent = document.getElementById('step-content');
+            stepContent.innerHTML = `
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">${steps[currentStep].title}</h3>
+                <div class="bg-white border rounded-lg p-6 min-h-[400px]">
+                    ${steps[currentStep].content}
+                </div>
+            `;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderExample();
+            updateStep();
+        });
+    </script>
+</body>
+</html> 
