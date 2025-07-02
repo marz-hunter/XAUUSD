@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #0a0e1a;
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
             color: #e0e0e0;
             line-height: 1.6;
             padding: 20px;
@@ -21,147 +21,127 @@
         }
 
         .dashboard-container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
         .dashboard-header {
             text-align: center;
             margin-bottom: 40px;
-            padding: 20px;
-            background: linear-gradient(135deg, #1a1f2e 0%, #2d3748 100%);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            background: rgba(26, 31, 46, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(79, 195, 220, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
         }
 
         .dashboard-header h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(45deg, #4fc3dc, #667eea);
+            font-size: 3rem;
+            background: linear-gradient(45deg, #4fc3dc, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
 
         .dashboard-header p {
             color: #a0a0a0;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .widget-section {
+            margin-bottom: 40px;
         }
 
         .widget-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 25px;
-            margin-bottom: 30px;
         }
 
-        .widget-container {
-            background: #1a1f2e;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .widget-wrapper {
+            background: rgba(26, 31, 46, 0.95);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(79, 195, 220, 0.2);
+            position: relative;
             overflow: hidden;
         }
 
-        .widget-container:hover {
+        .widget-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4fc3dc, #667eea);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .widget-wrapper:hover::before {
+            transform: scaleX(1);
+        }
+
+        .widget-wrapper:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 40px rgba(79, 195, 220, 0.3);
+            border-color: rgba(79, 195, 220, 0.4);
         }
 
         .widget-title {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
             color: #4fc3dc;
             font-weight: 600;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .widget-content {
-            position: relative;
-            width: 100%;
-            min-height: 400px;
+        .widget-icon {
+            font-size: 1.6rem;
         }
 
-        .widget-content.small {
-            min-height: 250px;
-        }
-
-        .widget-content.medium {
-            min-height: 450px;
-        }
-
-        .widget-content.large {
-            min-height: 600px;
-        }
-
-        .widget-content iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 8px;
-        }
-
-        .full-width-widget {
+        .widget-full {
             grid-column: 1 / -1;
         }
 
-        .powered-by {
-            font-size: 0.75rem;
-            color: #666;
-            text-align: center;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #2d3748;
+        .widget-large {
+            grid-column: span 2;
         }
 
-        .powered-by a {
-            color: #4fc3dc;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .widget-large {
+                grid-column: span 1;
+            }
         }
 
-        .powered-by a:hover {
-            color: #667eea;
-            text-decoration: underline;
-        }
-
-        /* TradingView Widget Specific Styles */
-        .tradingview-widget-container {
-            width: 100%;
-            height: 100%;
-        }
-
-        .tradingview-widget-copyright {
-            display: none;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            min-height: 300px;
-        }
-
-        .loading::after {
-            content: '';
-            width: 50px;
-            height: 50px;
-            border: 3px solid #2d3748;
-            border-top: 3px solid #4fc3dc;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive Design */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -176,31 +156,45 @@
                 gap: 15px;
             }
 
-            .widget-container {
+            .widget-wrapper {
                 padding: 15px;
-            }
-
-            .widget-title {
-                font-size: 1.1rem;
             }
         }
 
-        /* Custom Scrollbar */
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .widget-wrapper {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 12px;
         }
 
         ::-webkit-scrollbar-track {
             background: #1a1f2e;
+            border-radius: 6px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #4fc3dc;
-            border-radius: 5px;
+            background: linear-gradient(180deg, #4fc3dc, #667eea);
+            border-radius: 6px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #667eea;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+        }
+
+        /* Separator */
+        .section-separator {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(79, 195, 220, 0.5), transparent);
+            margin: 40px 0;
         }
     </style>
 </head>
@@ -208,198 +202,168 @@
     <div class="dashboard-container">
         <div class="dashboard-header">
             <h1>Forex Trading Dashboard</h1>
-            <p>Monitor pasar forex dan analisis teknikal real-time</p>
+            <p>Professional Trading Analysis & Market Intelligence</p>
         </div>
 
-        <div class="widget-grid">
-            <!-- DXY Technical Analysis Widget -->
-            <div class="widget-container">
-                <h2 class="widget-title">💵 DXY (Dollar Index) Analysis</h2>
-                <div class="widget-content medium">
+        <!-- TradingView Widgets Section -->
+        <div class="widget-section">
+            <div class="widget-grid">
+                <!-- DXY Widget -->
+                <div class="widget-wrapper">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">💵</span>
+                        DXY (Dollar Index) Analysis
+                    </h2>
+                    <!-- TradingView Widget BEGIN -->
                     <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-                        {
-                            "colorTheme": "dark",
-                            "displayMode": "multiple",
-                            "isTransparent": false,
-                            "locale": "en",
-                            "interval": "1m",
-                            "disableInterval": false,
-                            "width": "100%",
-                            "height": 450,
-                            "symbol": "TVC:DXY",
-                            "showIntervalTabs": true
-                        }
-                        </script>
+                      <div class="tradingview-widget-container__widget"></div>
+                      <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+                      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                      {
+                      "colorTheme": "dark",
+                      "displayMode": "multiple",
+                      "isTransparent": false,
+                      "locale": "en",
+                      "interval": "1m",
+                      "disableInterval": false,
+                      "width": 425,
+                      "height": 450,
+                      "symbol": "TVC:DXY",
+                      "showIntervalTabs": true
+                    }
+                      </script>
                     </div>
+                    <!-- TradingView Widget END -->
                 </div>
-                <div class="powered-by">
-                    <a href="https://www.tradingview.com/" target="_blank" rel="noopener">
-                        Powered by TradingView
-                    </a>
-                </div>
-            </div>
 
-            <!-- XAU/USD Technical Analysis Widget -->
-            <div class="widget-container">
-                <h2 class="widget-title">🏆 XAU/USD (Gold) Analysis</h2>
-                <div class="widget-content medium">
+                <!-- XAU/USD Widget -->
+                <div class="widget-wrapper">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">🏆</span>
+                        XAU/USD (Gold) Analysis
+                    </h2>
+                    <!-- TradingView Widget BEGIN -->
                     <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-                        {
-                            "colorTheme": "dark",
-                            "displayMode": "multiple",
-                            "isTransparent": false,
-                            "locale": "en",
-                            "interval": "1m",
-                            "disableInterval": false,
-                            "width": "100%",
-                            "height": 450,
-                            "symbol": "OANDA:XAUUSD",
-                            "showIntervalTabs": true
-                        }
-                        </script>
+                      <div class="tradingview-widget-container__widget"></div>
+                      <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+                      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                      {
+                      "colorTheme": "dark",
+                      "displayMode": "multiple",
+                      "isTransparent": false,
+                      "locale": "en",
+                      "interval": "1m",
+                      "disableInterval": false,
+                      "width": 425,
+                      "height": 450,
+                      "symbol": "OANDA:XAUUSD",
+                      "showIntervalTabs": true
+                    }
+                      </script>
                     </div>
-                </div>
-                <div class="powered-by">
-                    <a href="https://www.tradingview.com/" target="_blank" rel="noopener">
-                        Powered by TradingView
-                    </a>
+                    <!-- TradingView Widget END -->
                 </div>
             </div>
+        </div>
 
-            <!-- FX Outlook Widget -->
-            <div class="widget-container">
-                <h2 class="widget-title">📊 FX Market Outlook</h2>
-                <div class="widget-content small">
-                    <div class="loading"></div>
-                    <script class="powered" type="text/javascript"
-                            src="https://widgets.myfxbook.com/scripts/fxOutlook.js?type=1&symbols=,1,2,3,5,51"></script>
-                    <script type="text/javascript">
-                        setTimeout(() => {
-                            showOutlookWidget();
-                            document.querySelector('.loading').style.display = 'none';
-                        }, 1000);
-                    </script>
+        <div class="section-separator"></div>
+
+        <!-- Myfxbook Widgets Section -->
+        <div class="widget-section">
+            <div class="widget-grid">
+                <!-- FX Outlook Widget -->
+                <div class="widget-wrapper">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">📊</span>
+                        FX Market Outlook
+                    </h2>
+                    <!-- myfxbook.com outlook widget - Start -->
+                    <div>
+                        <script class="powered" type="text/javascript"
+                                src="https://widgets.myfxbook.com/scripts/fxOutlook.js?type=1&symbols=,1,2,3,5,51"></script>
+                    </div>
+                    <div style="font-size: 10px">
+                    <a href="https://www.myfxbook.com" title="" class="myfxbookLink" target="_self" rel="noopener">
+                                Powered by Myfxbook.com</a>
+                        </div>
+
+                    <script type="text/javascript">showOutlookWidget()</script>
+                    <!-- myfxbook.com outlook widget - End -->
                 </div>
-                <div class="powered-by">
-                    <a href="https://www.myfxbook.com" target="_blank" rel="noopener">
-                        Powered by Myfxbook.com
-                    </a>
+
+                <!-- Heat Map Widget -->
+                <div class="widget-wrapper widget-full">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">🔥</span>
+                        Forex Heat Map
+                    </h2>
+                    <!-- myfxbook.com forexHeatMapWidget - Start -->
+                    <div>
+                        <iframe src="https://widgets.myfxbook.com/widgets/heat-map.html?symbols=51&type=0" width="100%" height="100%" frameborder="0"></iframe>
+
+                    </div>
+                    <div style="font-size: 10px">
+                        <a href="https://www.myfxbook.com" title="Myfxbook" class="myfxbookLink" target="_self" rel="noopener">Powered  by Myfxbook.com</a>
+                    </div>
+                    <!-- myfxbook.com forexHeatMapWidget - End -->
+                </div>
+
+                <!-- Economic Calendar -->
+                <div class="widget-wrapper">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">📅</span>
+                        Economic Calendar
+                    </h2>
+                    <!-- myfxbook.com Economic Calendar Widget - Start -->
+                    <iframe src="https://widget.myfxbook.com/widget/calendar.html?lang=id&impacts=2,3&symbols=USD" style="border: 0; width:100%; height:100%;"></iframe><div style="margin-top: 10px;">
+                                <div style="width: fit-content; margin: auto;font-family: roboto,sans-serif!important; font-size: 13px; color: #666666;">
+                                 <a href="https://www.myfxbook.com/forex-economic-calendar?utm_source=widget13&utm_medium=link&utm_campaign=copyright" title="Economic Calendar" class="myfxbookLink" target="_blank" rel="noopener"><b style="color:#666666">Economic Calendar</b></a>
+                                 by Myfxbook.com
+                                </div></div>
+                    <!-- myfxbook.com Economic Calendar Widget - End -->
                 </div>
             </div>
+        </div>
 
-            <!-- Technical Summary Widget -->
-            <div class="widget-container">
-                <h2 class="widget-title">📈 Technical Summary</h2>
-                <div class="widget-content medium">
-                    <iframe src="https://ssltsw.investing.com?lang=54&forex=1,2,3,5,7,9,68&commodities=8830,8836,8831,8849,8833,8862,8832&indices=23660,166,172,27,179,53094,170&stocks=345,346,347,348,349,350,352&tabs=1,2,3,4" 
-                            width="100%" 
-                            height="467"
-                            frameborder="0">
-                    </iframe>
-                </div>
-                <div class="powered-by">
-                    <a href="https://id.investing.com" target="_blank" rel="noopener">
-                        Widget oleh Investing.com Indonesia
-                    </a>
-                </div>
-            </div>
+        <div class="section-separator"></div>
 
-            <!-- Heat Map Widget -->
-            <div class="widget-container full-width-widget">
-                <h2 class="widget-title">🔥 Forex Heat Map</h2>
-                <div class="widget-content medium">
-                    <iframe src="https://widgets.myfxbook.com/widgets/heat-map.html?symbols=51&type=0" 
-                            width="100%" 
-                            height="100%" 
-                            frameborder="0">
-                    </iframe>
+        <!-- Investing.com Widgets Section -->
+        <div class="widget-section">
+            <div class="widget-grid">
+                <!-- Technical Summary -->
+                <div class="widget-wrapper">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">📈</span>
+                        Technical Summary
+                    </h2>
+                    <iframe src="https://ssltsw.investing.com?lang=54&forex=1,2,3,5,7,9,68&commodities=8830,8836,8831,8849,8833,8862,8832&indices=23660,166,172,27,179,53094,170&stocks=345,346,347,348,349,350,352&tabs=1,2,3,4" width="317" height="467"></iframe><div class="poweredBy" style="font-family:arial,helvetica,sans-serif; direction:ltr;"><span style="font-size: 11px;color: #333333;text-decoration: none;">Widget Ringkasan Teknikal Didukung oleh <a href="https://id.investing.com" rel="nofollow" target="_blank" style="font-size: 11px;color: #06529D; font-weight: bold;" class="underline_link">Investing.com Indonesia</a></span></div>
                 </div>
-                <div class="powered-by">
-                    <a href="https://www.myfxbook.com" target="_blank" rel="noopener">
-                        Powered by Myfxbook.com
-                    </a>
-                </div>
-            </div>
 
-            <!-- Economic Calendar Widget -->
-            <div class="widget-container">
-                <h2 class="widget-title">📅 Economic Calendar</h2>
-                <div class="widget-content medium">
-                    <iframe src="https://widget.myfxbook.com/widget/calendar.html?lang=id&impacts=2,3&symbols=USD" 
-                            style="border: 0; width:100%; height:100%;"
-                            frameborder="0">
-                    </iframe>
+                <!-- Live Currency Rates -->
+                <div class="widget-wrapper">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">💱</span>
+                        Live Currency Rates
+                    </h2>
+                    <iframe src="https://id.widgets.investing.com/live-currency-cross-rates?theme=darkTheme&pairs=1,3,2,4,8,6,68" width="100%" height="100%" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0"></iframe><div class="poweredBy" style="font-family: Arial, Helvetica, sans-serif;">Didukung Oleh <a href="https://id.investing.com?utm_source=WMT&amp;utm_medium=referral&amp;utm_campaign=LIVE_CURRENCY_X_RATES&amp;utm_content=Footer%20Link" target="_blank" rel="nofollow">Investing.com</a></div>
                 </div>
-                <div class="powered-by">
-                    <a href="https://www.myfxbook.com/forex-economic-calendar" target="_blank" rel="noopener">
-                        Economic Calendar by Myfxbook.com
-                    </a>
-                </div>
-            </div>
 
-            <!-- Live Currency Rates Widget -->
-            <div class="widget-container">
-                <h2 class="widget-title">💱 Live Currency Rates</h2>
-                <div class="widget-content medium">
-                    <iframe src="https://id.widgets.investing.com/live-currency-cross-rates?theme=darkTheme&pairs=1,3,2,4,8,6,68" 
-                            width="100%" 
-                            height="100%" 
-                            frameborder="0" 
-                            allowtransparency="true" 
-                            marginwidth="0" 
-                            marginheight="0">
-                    </iframe>
+                <!-- Fibonacci Calculator -->
+                <div class="widget-wrapper widget-large">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">🧮</span>
+                        Fibonacci Calculator
+                    </h2>
+                    <iframe frameborder="0" scrolling="auto" height="650" width="545" allowtransparency="true" marginwidth="0" marginheight="0" src="https://ssltools.investing.com/fibonacci-calculator/index.php?force_lang=54"></iframe><br /><div style="width:450"><span style="float:left"><span style="font-size: 11px;color: #333333;text-decoration: none;">Kalkulator Fibonacci ini didukung oleh <a href="https://id.investing.com" rel="nofollow" target="_blank" style="font-size: 11px;color: #06529D; font-weight: bold;" class="underline_link">Investing.com Indonesia</a></span></span></div>
                 </div>
-                <div class="powered-by">
-                    <a href="https://id.investing.com" target="_blank" rel="noopener">
-                        Didukung oleh Investing.com
-                    </a>
-                </div>
-            </div>
 
-            <!-- Fibonacci Calculator Widget -->
-            <div class="widget-container">
-                <h2 class="widget-title">🧮 Fibonacci Calculator</h2>
-                <div class="widget-content large">
-                    <iframe frameborder="0" 
-                            scrolling="auto" 
-                            height="650" 
-                            width="100%" 
-                            allowtransparency="true" 
-                            marginwidth="0" 
-                            marginheight="0" 
-                            src="https://ssltools.investing.com/fibonacci-calculator/index.php?force_lang=54">
-                    </iframe>
-                </div>
-                <div class="powered-by">
-                    <a href="https://id.investing.com" target="_blank" rel="noopener">
-                        Kalkulator Fibonacci oleh Investing.com Indonesia
-                    </a>
-                </div>
-            </div>
-
-            <!-- Technical Analysis Widget -->
-            <div class="widget-container">
-                <h2 class="widget-title">🎯 Technical Analysis</h2>
-                <div class="widget-content small">
-                    <iframe frameborder="0" 
-                            scrolling="no" 
-                            height="253" 
-                            width="100%" 
-                            allowtransparency="true" 
-                            marginwidth="0" 
-                            marginheight="0" 
-                            src="https://ssltools.investing.com/technical_summary.php?pairs=1,2,5,8,8830&curr-name-color=%230059B0&fields=5m,15m,1h,1d&force_lang=54">
-                    </iframe>
-                </div>
-                <div class="powered-by">
-                    <a href="https://id.investing.com" target="_blank" rel="noopener">
-                        Analisis Teknikal oleh Investing.com Indonesia
-                    </a>
+                <!-- Technical Analysis -->
+                <div class="widget-wrapper">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">🎯</span>
+                        Technical Analysis
+                    </h2>
+                    <iframe frameborder="0" scrolling="no" height="253" width="505" allowtransparency="true" marginwidth="0" marginheight="0" src="https://ssltools.investing.com/technical_summary.php?pairs=1,2,5,8,8830&curr-name-color=%230059B0&fields=5m,15m,1h,1d&force_lang=54"></iframe><br /><div style="width:505px;"><span style="float:left"><span style="font-size: 11px;color: #333333;text-decoration: none;">Analisis Teknikal ini didukung oleh <a href="https://id.investing.com" rel="nofollow" target="_blank" style="font-size: 11px;color: #06529D; font-weight: bold;" class="underline_link">Investing.com Indonesia</a></span></span></div>
                 </div>
             </div>
         </div>
