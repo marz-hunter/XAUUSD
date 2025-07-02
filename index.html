@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forex Trading Dashboard</title>
+    <title>Forex Trading Dashboard By Marzuki</title>
     <style>
         * {
             margin: 0;
@@ -76,7 +76,7 @@
 
         .widget-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 25px;
         }
 
@@ -133,6 +133,11 @@
 
         .widget-large {
             grid-column: span 2;
+            min-height: 500px;
+        }
+
+        .widget-wrapper iframe {
+            min-height: 450px;
         }
 
         /* Responsive adjustments */
@@ -201,11 +206,55 @@
 <body>
     <div class="dashboard-container">
         <div class="dashboard-header">
-            <h1>Forex Trading Dashboard</h1>
+            <h1>Forex Trading Dashboard By Marzuki</h1>
             <p>Professional Trading Analysis & Market Intelligence</p>
         </div>
 
-        <!-- TradingView Widgets Section -->
+        <!-- Market Overview Section -->
+        <div class="widget-section">
+            <div class="widget-grid">
+                <!-- Market Tickers Widget -->
+                <div class="widget-wrapper widget-full">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">📈</span>
+                        Market Overview - Live Tickers
+                    </h2>
+                    <!-- TradingView Widget BEGIN -->
+                    <div class="tradingview-widget-container">
+                      <div class="tradingview-widget-container__widget"></div>
+                      <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+                      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-tickers.js" async>
+                      {
+                      "symbols": [
+                        {
+                          "proName": "OANDA:XAUUSD",
+                          "title": "XAUUSD"
+                        },
+                        {
+                          "proName": "OKX:BTCUSD",
+                          "title": "BTCUSD"
+                        },
+                        {
+                          "proName": "INDEX:DXY",
+                          "title": "DXY"
+                        }
+                      ],
+                      "colorTheme": "dark",
+                      "locale": "en",
+                      "largeChartUrl": "",
+                      "isTransparent": false,
+                      "showSymbolLogo": true
+                    }
+                      </script>
+                    </div>
+                    <!-- TradingView Widget END -->
+                </div>
+            </div>
+        </div>
+
+        <div class="section-separator"></div>
+
+        <!-- TradingView Analysis Section -->
         <div class="widget-section">
             <div class="widget-grid">
                 <!-- DXY Widget -->
@@ -263,6 +312,56 @@
                     </div>
                     <!-- TradingView Widget END -->
                 </div>
+
+                <!-- Economic Events Widget -->
+                <div class="widget-wrapper">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">🌍</span>
+                        Economic Events Calendar
+                    </h2>
+                    <!-- TradingView Widget BEGIN -->
+                    <div class="tradingview-widget-container">
+                      <div class="tradingview-widget-container__widget"></div>
+                      <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+                      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+                      {
+                      "colorTheme": "dark",
+                      "isTransparent": false,
+                      "locale": "en",
+                      "countryFilter": "ar,au,br,ca,cn,fr,de,in,id,it,jp,kr,mx,ru,sa,za,tr,gb,us,eu",
+                      "importanceFilter": "-1,0,1",
+                      "width": 400,
+                      "height": 550
+                    }
+                      </script>
+                    </div>
+                    <!-- TradingView Widget END -->
+                </div>
+
+                <!-- Market News Timeline -->
+                <div class="widget-wrapper">
+                    <h2 class="widget-title">
+                        <span class="widget-icon">📰</span>
+                        Market News Timeline
+                    </h2>
+                    <!-- TradingView Widget BEGIN -->
+                    <div class="tradingview-widget-container">
+                      <div class="tradingview-widget-container__widget"></div>
+                      <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+                      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+                      {
+                      "displayMode": "regular",
+                      "feedMode": "all_symbols",
+                      "colorTheme": "dark",
+                      "isTransparent": false,
+                      "locale": "en",
+                      "width": 400,
+                      "height": 550
+                    }
+                      </script>
+                    </div>
+                    <!-- TradingView Widget END -->
+                </div>
             </div>
         </div>
 
@@ -309,7 +408,7 @@
                 </div>
 
                 <!-- Economic Calendar -->
-                <div class="widget-wrapper">
+                <div class="widget-wrapper widget-large">
                     <h2 class="widget-title">
                         <span class="widget-icon">📅</span>
                         Economic Calendar
